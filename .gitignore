@@ -1,0 +1,17 @@
+# python
+#
+__pycache__/
+.pyc
+
+# Visual Studio 2017
+.vs/
+Debug/
+Release/
+obj/
+
+# logfiles
+.log
+log/
+log*/
+
+.idea

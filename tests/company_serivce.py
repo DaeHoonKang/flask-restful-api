@@ -3,7 +3,7 @@ import unittest
 from app import create_app
 import json
 from http import HTTPStatus
-import itertools
+from db.company import Company
 
 
 class CompanyServiceTest(unittest.TestCase):
@@ -64,6 +64,15 @@ class CompanyServiceTest(unittest.TestCase):
         self.assertEqual(response3.status_code, HTTPStatus.OK)
         print("tag : tag_3")
         print(json.loads(response3.get_data().decode()))
+
+    def test_put_tag(self):
+        print("===========================================")
+        response = self.app.post('/company/tag', data=json.dumps({"company": "원티드랩", "tag": "태그6"}), content_type='application/json')
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        print("put : 태그_6")
+        res_data = json.loads(response.get_data().decode())
+        count = Company.objects(name="원티드랩").count()
+        self.assertEqual(res_data['count'], count)
 
 
 if __name__ == '__main__':

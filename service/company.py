@@ -4,15 +4,14 @@ import json
 from http import HTTPStatus
 from flask import Blueprint, make_response, jsonify, request
 from db.company import Company
-
+from flask import current_app as app
 
 company_service = Blueprint('company', __name__, url_prefix='/company')
 
 
 @company_service.route('/autocomplete', methods=['GET'])
 def get_company_name():
-    """
-    AutoComplete Function of company name
+    """  AutoComplete Function of company name
     :return:
     status code
         200 :

@@ -1,13 +1,22 @@
 # -*- coding: utf-8 -*-
+import yaml
+import sys
+from absl import flags
 from mongoengine import *
 from flask import Flask
 from service.version import version_service
 from service.company import company_service
 
 
-def create_app():
+flags.DEFINE_string("config", "config.yaml", "config file")
+flags.DEFINE_boolean("debug", False, "if debug is true, flask debug mode on")
+
+
+def create_app(config):
     # connect to mongodb
-    connect('company', host='127.0.0.1', port=27017)
+    connect(config['mongo']['db'],
+            host=config['mongo']['host'],
+            port=config['mongo']['port'])
     # global flask app
     app = Flask(__name__)
     # register version service
@@ -18,5 +27,15 @@ def create_app():
 
 
 if __name__ == "__main__":
-    app = create_app()
-    app.run(debug=True)
+    args = flags.FLAGS
+    args(sys.argv)
+
+    with open(args.config, 'r') as stream:
+        try:
+            config = yaml.load(stream)
+            app = create_app(config)
+            app.run(debug=args.debug,
+                    host=config['run']['host'],
+                    port=config['run']['port'])
+        except yaml.YAMLError as e:
+            print(e)

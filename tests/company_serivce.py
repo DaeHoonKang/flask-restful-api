@@ -2,6 +2,7 @@
 import unittest
 from app import create_app
 import json
+import yaml
 from http import HTTPStatus
 from db.company import Company
 
@@ -9,7 +10,12 @@ from db.company import Company
 class CompanyServiceTest(unittest.TestCase):
 
     def setUp(self):
-        self.app = create_app().test_client()
+        with open('../config.yaml', 'r') as stream:
+            try:
+                config = yaml.load(stream)
+                self.app = create_app(config).test_client()
+            except Exception as e:
+                print(e)
 
     def test_autocomplete(self):
         print("===========================================")

@@ -2,14 +2,16 @@
 import yaml
 import sys
 import time
-import datetime
 import logging.config
+import traceback
+from http import HTTPStatus
 from absl import flags
 from mongoengine import *
-from flask import Flask, g, request
+from flask import Flask, g, request, make_response, jsonify
 from initialize.logging_config import logging_config
 from service.version import version_service
 from service.company import company_service
+from exceptions.exception import InvalidParams
 
 
 flags.DEFINE_string("config", "config.yaml", "config file")
@@ -53,6 +55,20 @@ def create_app(config):
         logging.getLogger('werkzeug').info(message)
 
         return response
+
+    # register exceptions
+    @app.errorhandler(InvalidParams)
+    def handle_invalid_params(error):
+        logging.getLogger('werkzeug').error(error.to_dict())
+        logging.getLogger('werkzeug').error(traceback.format_exc())
+        # make reason
+        return make_response(jsonify(error.to_dict()), error.status_code)
+
+    @app.errorhandler(Exception)
+    def handle_invalid_params(error):
+        logging.getLogger('werkzeug').error(error)
+        logging.getLogger('werkzeug').error(traceback.format_exc())
+        return make_response(jsonify({'reason': 'internal server error'}), HTTPStatus.INTERNAL_SERVER_ERROR)
 
     return app
 

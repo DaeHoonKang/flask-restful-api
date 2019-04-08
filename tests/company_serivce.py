@@ -74,6 +74,17 @@ class CompanyServiceTest(unittest.TestCase):
         count = Company.objects(name="원티드랩").count()
         self.assertEqual(res_data['count'], count)
 
+    def test_delete_tag(self):
+        print("===========================================")
+        response = self.app.delete('/company/tag', data=json.dumps({"company": "원티드랩", "tag": "태그6"}), content_type='application/json')
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        print("delete : 태그_6")
+        res_data = json.loads(response.get_data().decode())
+        companies = Company.objects(name="원티드랩")
+        self.assertEqual(res_data['count'], companies.count())
+        for company in companies:
+            print("name: {}, tags: {}".format(company.name, company.tags))
+
 
 if __name__ == '__main__':
     unittest.main()

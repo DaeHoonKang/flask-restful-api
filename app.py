@@ -5,7 +5,8 @@ from service.version import version_service
 from service.company import company_service
 
 
-
+# connect to mongodb
+connect('company', host='127.0.0.1', port=27017)
 # global flask app
 app = Flask(__name__)
 # register version service

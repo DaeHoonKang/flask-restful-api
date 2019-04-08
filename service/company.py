@@ -5,13 +5,24 @@ from http import HTTPStatus
 from flask import Blueprint, make_response, jsonify, request
 from db.company import Company
 
-# connect to mongodb
-connect('company', host='127.0.0.1', port=27017)
+
 company_service = Blueprint('company', __name__, url_prefix='/company')
 
 
 @company_service.route('/autocomplete', methods=['GET'])
 def get_company_name():
+    """
+    AutoComplete Function of company name
+    :return:
+    status code
+        200 :
+            json format {'count': ?, 'data': ?}
+            count is number
+            data is list
+        400 :
+        500 :
+            json format {'msg': ?}
+    """
     try:
         input = request.args.get('input')
         if not input:

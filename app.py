@@ -68,7 +68,8 @@ def create_app(config):
     def handle_invalid_params(error):
         logging.getLogger('werkzeug').error(error)
         logging.getLogger('werkzeug').error(traceback.format_exc())
-        return make_response(jsonify({'reason': 'internal server error'}), HTTPStatus.INTERNAL_SERVER_ERROR)
+        return make_response(jsonify({'reason': 'internal server error'}),
+                             HTTPStatus.INTERNAL_SERVER_ERROR)
 
     return app
 

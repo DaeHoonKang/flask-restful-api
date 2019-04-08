@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
 import json
-import logging
 from http import HTTPStatus
 from flask import Blueprint, make_response, jsonify, request
 from db.company import Company
@@ -74,7 +73,6 @@ def delete_company_tag():
     if not company or not tag:
         raise InvalidParams(reason='The parameters field(company, tag) is required when calling the api')
     # find company
-    company = None
     find_company = Company.objects(name=company)
     if not find_company or len(find_company) is 0:
         return make_response(jsonify({'count': 0}), HTTPStatus.OK)

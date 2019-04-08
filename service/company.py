@@ -59,8 +59,6 @@ def put_company_tag():
         return make_response(jsonify({'count': 0}), HTTPStatus.OK)
     # update tag
     count = Company.objects(name=company).update(add_to_set__tags=tag)
-    if count is 0:
-        raise Exception('Failed to Company(name={}).update(add_to_set_tag={})'.format(company, tag))
     return make_response(jsonify({'count': count}), HTTPStatus.OK)
 
 
@@ -79,10 +77,7 @@ def delete_company_tag():
     company = None
     find_company = Company.objects(name=company)
     if not find_company or len(find_company) is 0:
-        a = find_company.a
         return make_response(jsonify({'count': 0}), HTTPStatus.OK)
     # update tag
     count = Company.objects(name=company).update(pull__tags=tag)
-    if count is 0:
-        raise Exception('Failed to Company(name={}).update(pull_tag={})'.format(company, tag))
     return make_response(jsonify({'count': count}), HTTPStatus.OK)

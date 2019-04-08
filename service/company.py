@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
+import json
 from http import HTTPStatus
 from flask import Blueprint, make_response, jsonify, request
 from db.company import Company
@@ -62,4 +63,40 @@ def get_company_tag():
             return make_response(jsonify({'count': 0, 'data': {}}), HTTPStatus.OK)
         return make_response(jsonify({'count': len(companies), 'data': companies}), HTTPStatus.OK)
     except Exception:
+        return make_response('Internal Server Error', HTTPStatus.INTERNAL_SERVER_ERROR)
+
+
+@company_service.route('/tag', methods=['POST'])
+def put_company_tag():
+    """
+        tag query of company name
+        :return:
+        status code
+            200 :
+                json format {'count': ?, 'data': ?}
+                count is number
+                data is list
+            400 :
+            500 :
+                json format {'msg': ?}
+        """
+    try:
+        data = json.loads(request.data)
+        company = data.get('company', None)
+        tag = data.get('tag', None)
+        if not company or not tag:
+            return make_response(
+                jsonify({'msg': 'The parameters field(company, tag) is required when calling the api'}),
+                HTTPStatus.BAD_REQUEST)
+        # find company
+        find_company = Company.objects(name=company)
+        if not find_company or len(find_company) is 0:
+            return make_response(jsonify({'count': 0}), HTTPStatus.OK)
+        # update tag
+        count = Company.objects(name=company).update(add_to_set__tags=tag)
+        if count is 0:
+            raise Exception('Failed to Company(name={}).update(tag={})'.format(company, tag))
+        return make_response(jsonify({'count': count}), HTTPStatus.OK)
+    except Exception as e:
+        print(e)
         return make_response('Internal Server Error', HTTPStatus.INTERNAL_SERVER_ERROR)

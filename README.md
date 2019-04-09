@@ -100,5 +100,5 @@ switched to db company
 bye
 ```
 ### Run
-``` python run.py ```
+``` python app.py ```
 

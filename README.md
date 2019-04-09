@@ -11,12 +11,11 @@ test : windows, mac
 ```
 
 ## API 명세서
-프로젝트의 Wiki페이지에 작성되어 있음
 
 [API 명세서](https://github.com/DaeHoonKang/flask-restful-api/wiki/RESTful-API-%EB%AA%85%EC%84%B8%EC%84%9C)
 
 ## 설치
-아래 순서와 같이 설치 하도록 함 
+설치 순서
  - 파이썬 3.6.8 설치
  - MongoDB 설치
  - Git Clone
@@ -25,23 +24,25 @@ test : windows, mac
  - run app
  
  ### 파이썬 3.6.8
- 3.7x 버전을 사용하지 않은 이유는 MongoDB ORM 패키지인 mongoengine이 3.7x을 지원하지 않아서 3.6.8로 선택함
-  
+   
  [파이썬 다운로드](https://www.python.org/downloads/release/python-368/)
  or
  [pyenv](https://github.com/pyenv/pyenv)
  
- ### MongoDB 설치
- 샘플 프로젝트로 개발된 버전이라 설치 시 MongoDB 보안 설정은 생략하도록 함
+ *3.7x 버전을 사용하지 않은 이유는 MongoDB ORM 패키지인 mongoengine이 3.7x을 지원하지 않아서 3.6.8로 선택함*
  
- 윈도우즈의 경우 [MongoDB 다운로드](https://www.mongodb.com/download-center/community?jmp=nav) 페이지에서 다운 받아서 설치하면 됨
- Mac의 경우 brew 를 사용하면 됨
+ ### MongoDB 설치
+ *샘플 프로젝트로 개발된 버전이라 설치 시 MongoDB 보안 설정 생략*
+ 
+ 윈도우즈의 경우 [MongoDB 다운로드](https://www.mongodb.com/download-center/community?jmp=nav) 페이지에서 다운 받아서 설치
+ Mac의 경우 brew 를 사용
  
  ``` brew install mongodb```
  
  데이터베이스 저장할 폴더 만들기
  
- MongoDB 실행할 때 저장할 기본 폴더가 /data/db를 가리키므로 해당 폴더를 미리 만들어 준다
+ *MongoDB 실행할 때 기본 저장 폴더가 data/db 
+ 폴더 생성하지 않으면  실행되지 않음*
  
  ``` Mac > mkdir -p /data/db```
   

@@ -19,10 +19,7 @@ def get_company_name():
     input = request.args.get('input')
     if not input:
         raise InvalidParams(reason='The input parameter field is required when calling the api')
-    regex = re.compile(".*{}.*".format(input))
-    companies = Company.objects(name=regex).distinct(field='name')
-    if not companies:
-        return make_response(jsonify({'count': 0, 'data': {}}), HTTPStatus.OK)
+    companies = Company.objects(name__contains=input.format(input)).distinct(field='name')
     return make_response(jsonify({'count': len(companies), 'data': companies}), HTTPStatus.OK)
 
 
@@ -36,8 +33,6 @@ def get_company_tag():
     if not input:
         raise InvalidParams(reason='The input parameter field is required when calling the api')
     companies = Company.objects(tags=input).distinct(field='name')
-    if not companies:
-        return make_response(jsonify({'count': 0, 'data': {}}), HTTPStatus.OK)
     return make_response(jsonify({'count': len(companies), 'data': companies}), HTTPStatus.OK)
 
 
@@ -52,10 +47,6 @@ def put_company_tag():
     tag = data.get('tag', None)
     if not company or not tag:
         raise InvalidParams(reason='The parameters field(company, tag) is required when calling the api')
-    # find company
-    find_company = Company.objects(name=company)
-    if not find_company or len(find_company) is 0:
-        return make_response(jsonify({'count': 0}), HTTPStatus.OK)
     # update tag
     count = Company.objects(name=company).update(add_to_set__tags=tag)
     return make_response(jsonify({'count': count}), HTTPStatus.OK)
@@ -72,10 +63,6 @@ def delete_company_tag():
     tag = data.get('tag', None)
     if not company or not tag:
         raise InvalidParams(reason='The parameters field(company, tag) is required when calling the api')
-    # find company
-    find_company = Company.objects(name=company)
-    if not find_company or len(find_company) is 0:
-        return make_response(jsonify({'count': 0}), HTTPStatus.OK)
     # update tag
     count = Company.objects(name=company).update(pull__tags=tag)
     return make_response(jsonify({'count': count}), HTTPStatus.OK)

@@ -22,7 +22,7 @@ logging_config = {
             "level": "INFO",
             "formatter": "simple",
             "filename": "app.log",
-            "dir": "/log",
+            "dir": "log",
             "maxBytes": 10485760,
             "backupCount": 20,
             "encoding": "utf8"
@@ -56,6 +56,7 @@ def validation_check(logging_config):
         try:
             if not os.path.exists(dir):
                 os.makedirs(dir)
+            del handler['dir']
         except Exception as e:
             result[0] = False
             result[1] = str(e)

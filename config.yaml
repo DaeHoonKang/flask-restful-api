@@ -5,3 +5,4 @@ mongo:
   host: "127.0.0.1"
   port: 27017
   db: "company"
+  connection_timeout: 1500

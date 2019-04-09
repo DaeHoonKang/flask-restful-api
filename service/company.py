@@ -19,7 +19,7 @@ def get_company_name():
     input = request.args.get('input')
     if not input:
         raise InvalidParams(reason='The input parameter field is required when calling the api')
-    companies = Company.objects(name__contains=input.format(input)).distinct(field='name')
+    companies = Company.objects(name__contains=input).distinct(field='name')
     return make_response(jsonify({'count': len(companies), 'data': companies}), HTTPStatus.OK)
 
 

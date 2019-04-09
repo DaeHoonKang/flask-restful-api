@@ -78,7 +78,8 @@ def create_mongo(config):
     # connect to mongodb
     connect(config['mongo']['db'],
             host=config['mongo']['host'],
-            port=config['mongo']['port'])
+            port=config['mongo']['port'],
+            serverSelectionTimeoutMS=config['mongo']['connection_timeout'])
 
 
 if __name__ == "__main__":

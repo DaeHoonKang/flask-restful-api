@@ -8,7 +8,7 @@ from http import HTTPStatus
 from absl import flags
 from mongoengine import *
 from flask import Flask, g, request, make_response, jsonify
-from initialize.logging_config import logging_config
+from initialize.logging_config import logging_config, validation_check
 from service.version import version_service
 from service.company import company_service
 from exceptions.exception import InvalidParams
@@ -91,6 +91,11 @@ if __name__ == "__main__":
             # load config yaml
             config = yaml.load(stream, Loader=yaml.FullLoader)
             # initialize logging
+            res = validation_check(logging_config)
+            if not res[0]:
+                print(res[1])
+                exit(1)
+
             logging.config.dictConfig(logging_config)
             # create mongodb
             create_mongo(config)

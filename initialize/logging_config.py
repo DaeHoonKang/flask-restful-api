@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import os
+
+
 logging_config = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -18,7 +21,8 @@ logging_config = {
             "class": "logging.handlers.RotatingFileHandler",
             "level": "INFO",
             "formatter": "simple",
-            "filename": "./log/app.log",
+            "filename": "app.log",
+            "dir": "/log",
             "maxBytes": 10485760,
             "backupCount": 20,
             "encoding": "utf8"
@@ -36,3 +40,27 @@ logging_config = {
         "handlers": ["console", "info_file_handler"]
     }
 }
+
+
+def validation_check(logging_config):
+    handlers = logging_config.get('handlers', None)
+    result = [True, '']
+
+    if not handlers:
+        return False
+    # make directories
+    for name, handler in handlers.items():
+        dir = handler.get('dir', None)
+        if not dir:
+            continue
+        try:
+            if not os.path.exists(dir):
+                os.makedirs(dir)
+        except Exception as e:
+            result[0] = False
+            result[1] = str(e)
+            break
+
+    return result
+
+

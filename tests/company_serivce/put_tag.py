@@ -21,11 +21,27 @@ class PutTagTest(unittest.TestCase):
                 print(e)
 
     def test_put_tag(self):
-        print("===========================================")
-        response = self.app.post('/company/tag', data=json.dumps({"company": "원티드랩", "tag": "태그6"}), content_type='application/json')
+        print('\r\n==== Test Put Tag ====')
+        new_tag = '태그_999'
+        data = json.dumps({'company': '원티드랩', 'tag': new_tag})
+        response = self.app.post('/company/tag', data=data, content_type='application/json')
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        print("put : 태그_6")
-        res_data = json.loads(response.get_data().decode())
-        companies = Company.objects(name="원티드랩")
+        print('POST - /company/tag data={}'.format(data))
+        companies = Company.objects(name='원티드랩')
         for company in companies:
-            print("name: {}, tags: {}".format(company.name, company.tags))
+            print('{}, {}'.format(company.name, company.tags))
+            self.assertEqual(new_tag in company.tags, True)
+
+    def test_bad_request(self):
+        print('\r\n==== Test Put Tag ====')
+        new_tag = '태그_999'
+        data = {'company': '원티드랩', 'tagggggg': '태그_999'}
+        response = self.app.post('/company/tag', data=data, content_type='application/json')
+        print('POST - /company/tag data={}'.format(data))
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
+
+        data = {'company': '원티드랩'}
+        response = self.app.post('/company/tag', data=data, content_type='application/json')
+        print('POST - /company/tag data={}'.format(data))
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
+

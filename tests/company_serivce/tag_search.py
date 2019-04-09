@@ -20,18 +20,31 @@ class TagSearchTest(unittest.TestCase):
                 print(e)
 
     def test_tag(self):
-        print("===========================================")
-        response1 = self.app.get('/company/tag?input=태그_3')
-        self.assertEqual(response1.status_code, HTTPStatus.OK)
-        print("tag : 태그_3")
-        print(json.loads(response1.get_data().decode()))
+        print('\r\n==== Test Tag Search ====')
+        response = self.app.get('/company/tag?input=태그_3')
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        print('GET - /company/tag?input=태그_3')
+        print('Response - {}'.format(json.loads(response.get_data().decode())))
 
-        response2 = self.app.get('/company/tag?input=タグ_3')
-        self.assertEqual(response2.status_code, HTTPStatus.OK)
-        print("tag : タグ_3")
-        print(json.loads(response2.get_data().decode()))
+        response = self.app.get('/company/tag?input=タグ_3')
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        print('GET - /company/tag?input=タグ_3')
+        print('Response - {}'.format(json.loads(response.get_data().decode())))
 
-        response3 = self.app.get('/company/tag?input=tag_3')
-        self.assertEqual(response3.status_code, HTTPStatus.OK)
-        print("tag : tag_3")
-        print(json.loads(response3.get_data().decode()))
+        response = self.app.get('/company/tag?input=tag_3')
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        print('GET - /company/tag?input=tag_3')
+        print('Response - {}'.format(json.loads(response.get_data().decode())))
+
+    def test_bad_request(self):
+        print('\r\n==== Test Bad Request ====')
+        response = self.app.get('/company/tag?=태그_3')
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
+        print('GET - /company/tag?=태그_3')
+        print('Response - {}'.format(json.loads(response.get_data().decode())))
+
+        response = self.app.get('/company/tag?intputt=태그_3')
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
+        print('GET - /company/tag?intputt=태그_3')
+        print('Response - {}'.format(json.loads(response.get_data().decode())))
+
